@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>MediBuddy Menu</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="min-h-screen bg-gradient-to-br from-green-300 to-emerald-500 py-10">
+
+  <h1 id="welcomeText" class="text-4xl font-bold text-white mb-8"></h1>
+
+  <!-- BIG Avatar -->
+   <div class="min-h-screen bg-gradient-to-br from-green-300 to-emerald-500 py-16">
+
+  <div class="max-w-4xl mx-auto bg-white/95 p-10 rounded-3xl shadow-2xl space-y-4 text-center">
+
+    <h2 id="welcomeText" class="text-3xl font-bold text-green-600"></h2>
+
+    <div class="flex justify-center">
+      <div id="mainAvatar" class="relative w-[500px] h-[500px]">
+
+        <img id="menuBody"
+             class="absolute inset-0 w-full h-full object-contain">
+
+        <img id="menuHair"
+             class="absolute inset-0 w-full h-full object-contain">
+
+        <img id="menuEyes"
+             class="absolute inset-0 w-full h-full object-contain">
+
+      </div>
+    </div>
+
+  </div>
+
+</div>
+  <div id="mainAvatar" class="relative w-96 h-96 mb-12"></div>
+
+  <div class="grid grid-cols-1 gap-6 w-full max-w-md">
+    <button class="bg-white p-5 rounded-2xl shadow-xl hover:scale-105 transition text-lg font-semibold">
+      🎮 Minigames
+    </button>
+    <button class="bg-white p-5 rounded-2xl shadow-xl hover:scale-105 transition text-lg font-semibold">
+      ⏰ Reminders
+    </button>
+  </div>
+
+  <script>
+document.addEventListener("DOMContentLoaded", () => {
+
+  const avatar = JSON.parse(localStorage.getItem("mediAvatar"));
+
+  if (!avatar) {
+    console.log("No avatar found");
+    window.location.href = "avatar.html";
+    return;
+  }
+
+  console.log("Loaded avatar:", avatar);
+
+  const body = document.getElementById("menuBody");
+  const hair = document.getElementById("menuHair");
+  const eyes = document.getElementById("menuEyes");
+  const welcome = document.getElementById("welcomeText");
+
+  if (body) body.src = `images/body${avatar.body}.png`;
+
+  if (hair) {
+    if (avatar.hair && avatar.hair !== 0) {
+      hair.src = `images/hair${avatar.hair}.png`;
+    } else {
+      hair.src = "";
+    }
+  }
+
+  if (eyes) {
+    eyes.src = `images/eyes_${avatar.eyes}.png`;
+  }
+
+  if (welcome) {
+    welcome.innerText = `Meet ${avatar.nickname}!`;
+  }
+
+});
+</script>
+</body>
+</html>
