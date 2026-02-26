@@ -145,46 +145,51 @@
     }, delay);
   }
   //==== SIGN UP ====
-  function signup() {
-    const username = document.getElementById("username").value.trim();
-    const password = document.getElementById("password").value.trim();
+ function signup() {
 
-    if (!username || !password) {
-      alert("Please enter username and password.");
-      return;
-    }
+  const username = document.getElementById("username").value.trim();
+  const password = document.getElementById("password").value.trim();
 
-    if (localStorage.getItem("mediUser")) {
-      alert("User already exists. Please login.");
-      return;
-    }
-
-    localStorage.setItem("mediUser", username);
-    localStorage.setItem("mediPass", password);
-
-    alert("Account created successfully!");
-    window.location.href = "avatar.html";
+  if (!username || !password) {
+    alert("Please enter username and password.");
+    return;
   }
 
+  // Get all users or create empty object
+  let users = JSON.parse(localStorage.getItem("mediUsers")) || {};
+
+  if (users[username]) {
+    alert("Username already taken.");
+    return;
+  }
+
+  // Save new user
+  users[username] = password;
+  localStorage.setItem("mediUsers", JSON.stringify(users));
+
+  alert("Account created successfully!");
+  window.location.href = "avatar.html";
+} 
   // ================= LOGIN =================
   function login() {
-    const username = document.getElementById("username").value.trim();
-    const password = document.getElementById("password").value.trim();
 
-    const storedUser = localStorage.getItem("mediUser");
-    const storedPass = localStorage.getItem("mediPass");
+  const username = document.getElementById("username").value.trim();
+  const password = document.getElementById("password").value.trim();
 
-    if (!storedUser) {
-      alert("No account found. Please sign up.");
-      return;
-    }
+  let users = JSON.parse(localStorage.getItem("mediUsers")) || {};
 
-    if (username === storedUser && password === storedPass) {
-      window.location.href = "avatar.html";
-    } else {
-      alert("Incorrect username or password.");
-    }
+  if (!users[username]) {
+    alert("No account found. Please sign up.");
+    return;
   }
+
+  if (users[username] === password) {
+    localStorage.setItem("currentUser", username);
+    window.location.href = "avatar.html";
+  } else {
+    alert("Incorrect username or password.");
+  }
+}
   // ================= MINI HUD =================
   function updateMiniHUD(stats) {
     if (!document.getElementById("miniHUD")) return;
