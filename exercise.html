@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Exercise Planner</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="min-h-screen bg-gradient-to-br from-green-300 to-emerald-500 flex items-center justify-center">
+
+  <div class="bg-white/95 p-10 rounded-3xl shadow-2xl w-full max-w-xl">
+
+    <h2 class="text-3xl font-bold text-center text-green-600 mb-6">
+      Today's Exercise Plan 💪
+    </h2>
+
+    <!-- Age Input -->
+    <input id="ageInput"
+      type="number"
+      placeholder="Enter your age"
+      class="w-full p-3 rounded-xl border mb-4 focus:ring-2 focus:ring-green-400" />
+
+    <!-- Tiredness Level -->
+    <select id="tirednessLevel"
+      class="w-full p-3 rounded-xl border mb-6 focus:ring-2 focus:ring-green-400">
+
+      <option value="">How tired are you today?</option>
+      <option value="low">Low (Full Energy)</option>
+      <option value="medium">Medium</option>
+      <option value="high">Very Tired</option>
+      <option value="skip">Skip Day</option>
+
+    </select>
+
+    <button onclick="generatePlan()"
+      class="w-full bg-green-600 text-white py-3 rounded-xl font-semibold mb-6">
+      Generate Plan
+    </button>
+
+    <!-- Exercise Output -->
+    <div id="exerciseList" class="space-y-3"></div>
+
+    <!-- Congratulations Message -->
+    <div id="congratsMessage" class="hidden mt-6 p-4 bg-green-100 text-green-700 rounded-xl text-center font-semibold">
+      🎉 Congratulations! You completed all your exercises today!
+    </div>
+
+    <!-- Back Button -->
+    <button onclick="goBack()"
+      class="w-full mt-6 bg-gray-200 text-gray-800 py-3 rounded-xl font-semibold">
+      ← Back
+    </button>
+
+  </div>
+
+<script>
+
+function generatePlan() {
+
+  const age = parseInt(document.getElementById("ageInput").value);
+  const tiredness = document.getElementById("tirednessLevel").value;
+  const listContainer = document.getElementById("exerciseList");
+  const congrats = document.getElementById("congratsMessage");
+
+  listContainer.innerHTML = "";
+  congrats.classList.add("hidden");
+
+  if (!age || !tiredness) {
+    alert("Please enter age and select tiredness level.");
+    return;
+  }
+
+  if (tiredness === "skip") {
+    listContainer.innerHTML = `
+      <div class="p-4 bg-yellow-100 rounded-xl">
+        😌 Rest Day! Light stretching and hydration recommended.
+      </div>
+    `;
+    return;
+  }
+
+  let exercises = [];
+
+  if (age < 13) {
+    exercises = ["10 Jumping Jacks", "10 Squats", "15 sec Plank", "Butterfly Pose"];
+  }
+  else if (age < 18) {
+    exercises = ["15 Pushups", "20 Squats", "30 sec Plank", "Surya Namaskar x3"];
+  }
+  else if (age < 40) {
+    exercises = ["20 Pushups", "25 Squats", "40 sec Plank", "Surya Namaskar x5"];
+  }
+  else {
+    exercises = ["10 Pushups", "15 Squats", "20 sec Plank", "Tadasana", "Bhujangasana"];
+  }
+
+  if (tiredness === "high") {
+    exercises = exercises.map(ex => "Light: " + ex);
+  }
+
+  exercises.forEach((exercise, index) => {
+
+    const div = document.createElement("div");
+    div.className = "flex items-center gap-3 bg-green-50 p-3 rounded-xl";
+
+    div.innerHTML = `
+      <input type="checkbox" id="ex${index}" class="w-5 h-5" onchange="checkCompletion()">
+      <label for="ex${index}" class="flex-1">${exercise}</label>
+    `;
+
+    listContainer.appendChild(div);
+  });
+
+}
+
+function checkCompletion() {
+
+  const checkboxes = document.querySelectorAll("#exerciseList input[type='checkbox']");
+  const congrats = document.getElementById("congratsMessage");
+
+  if (checkboxes.length === 0) return;
+
+  const allChecked = Array.from(checkboxes).every(cb => cb.checked);
+
+  if (allChecked) {
+    congrats.classList.remove("hidden");
+  }
+}
+
+function goBack() {
+  window.location.href = "menu.html";
+}
+
+</script>
+</body>
+</html>

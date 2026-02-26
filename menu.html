@@ -6,19 +6,50 @@
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
-<body class="min-h-screen bg-gradient-to-br from-green-300 to-emerald-500 py-10">
+<body class="min-h-screen bg-gradient-to-br from-green-300 to-emerald-500 py-10 flex flex-col items-center">
 
-  <h1 id="welcomeText" class="text-4xl font-bold text-white mb-8"></h1>
+  <!-- ===== TOP STATUS BARS ===== -->
+  <div class="w-full max-w-4xl bg-white/90 p-6 rounded-3xl shadow-2xl mb-8">
 
-  <!-- BIG Avatar -->
-   <div class="min-h-screen bg-gradient-to-br from-green-300 to-emerald-500 py-16">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
 
-  <div class="max-w-4xl mx-auto bg-white/95 p-10 rounded-3xl shadow-2xl space-y-4 text-center">
+      <!-- Hunger -->
+      <div>
+        <p class="font-semibold mb-2">🍗 Hunger</p>
+        <div class="w-full bg-gray-200 rounded-full h-5">
+          <div id="hungerBar" class="bg-red-400 h-5 rounded-full transition-all duration-500"></div>
+        </div>
+      </div>
+
+      <!-- Thirst -->
+      <div>
+        <p class="font-semibold mb-2">💧 Thirst</p>
+        <div class="w-full bg-gray-200 rounded-full h-5">
+          <div id="thirstBar" class="bg-blue-400 h-5 rounded-full transition-all duration-500"></div>
+        </div>
+      </div>
+
+      <!-- Sleep -->
+      <div>
+        <p class="font-semibold mb-2">😴 Sleep</p>
+        <div class="w-full bg-gray-200 rounded-full h-5">
+          <div id="sleepBar" class="bg-purple-400 h-5 rounded-full transition-all duration-500"></div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- ===== MAIN CARD ===== -->
+  <div class="max-w-4xl w-full bg-white/95 p-10 rounded-3xl shadow-2xl text-center space-y-6">
 
     <h2 id="welcomeText" class="text-3xl font-bold text-green-600"></h2>
 
+    <!-- Avatar -->
     <div class="flex justify-center">
-      <div id="mainAvatar" class="relative w-[500px] h-[500px]">
+      <div id="mainAvatar" class="relative w-[400px] h-[400px]">
 
         <img id="menuBody"
              class="absolute inset-0 w-full h-full object-contain">
@@ -27,37 +58,64 @@
              class="absolute inset-0 w-full h-full object-contain">
 
         <img id="menuEyes"
-             class="absolute inset-0 w-full h-full object-contain">
+             class="absolute inset-0 w-full h-full object-contain pointer-events-none">
 
       </div>
     </div>
 
-  </div>
+    <!-- Buttons -->
+    <div class="grid grid-cols-1 gap-6 w-full max-w-md mx-auto pt-6">
+
+
+  <button 
+    onclick="window.location.href='reminder.html'"
+    class="bg-white p-5 rounded-2xl shadow-xl hover:scale-105 transition text-lg font-semibold">
+    ⏰ Medicine Reminders
+  </button>
+
+  <button 
+    onclick="window.location.href='care.html'"
+    class="bg-yellow-400 text-white p-5 rounded-2xl shadow-xl hover:scale-105 transition text-lg font-semibold">
+    🍎 Care Your Medi
+  </button>
+
+  <button 
+    onclick="window.location.href='sleep.html'"
+    class="bg-purple-500 text-white p-5 rounded-2xl shadow-xl hover:scale-105 transition text-lg font-semibold">
+    💤 Sleep Tracker
+  </button>
+
+  <button 
+  onclick="window.location.href='exercise.html'"
+  class="bg-gradient-to-br from-blue-400 to-indigo-500 
+         text-white p-5 rounded-2xl shadow-xl 
+         hover:scale-105 hover:brightness-110
+         active:scale-95 active:brightness-95
+         transition duration-200 
+         text-lg font-semibold">
+  🏃 Exercise
+</button>
+
+<button 
+  onclick="logout()"
+  class="mt-6 text-sm text-red-500 hover:underline font-semibold">
+  🚪 Logout
+</button>
 
 </div>
-  <div id="mainAvatar" class="relative w-96 h-96 mb-12"></div>
 
-  <div class="grid grid-cols-1 gap-6 w-full max-w-md">
-    <button class="bg-white p-5 rounded-2xl shadow-xl hover:scale-105 transition text-lg font-semibold">
-      🎮 Minigames
-    </button>
-    <button class="bg-white p-5 rounded-2xl shadow-xl hover:scale-105 transition text-lg font-semibold">
-      ⏰ Reminders
-    </button>
   </div>
 
-  <script>
+
+<script>
 document.addEventListener("DOMContentLoaded", () => {
 
   const avatar = JSON.parse(localStorage.getItem("mediAvatar"));
 
   if (!avatar) {
-    console.log("No avatar found");
     window.location.href = "avatar.html";
     return;
   }
-
-  console.log("Loaded avatar:", avatar);
 
   const body = document.getElementById("menuBody");
   const hair = document.getElementById("menuHair");
@@ -74,15 +132,12 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  if (eyes) {
-    eyes.src = `images/eyes_${avatar.eyes}.png`;
-  }
+  if (eyes) eyes.src = `images/eyes_${avatar.eyes}.png`;
 
-  if (welcome) {
-    welcome.innerText = `Meet ${avatar.nickname}!`;
-  }
+  if (welcome) welcome.innerText = `Meet ${avatar.nickname}!`;
 
 });
 </script>
+<script src="script.js"></script>
 </body>
 </html>

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Sleep Tracker | MediBuddy</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="min-h-screen bg-gradient-to-br from-green-300 to-emerald-500 flex items-center justify-center">
+
+  <div class="w-full max-w-md bg-white/95 p-8 rounded-3xl shadow-2xl text-center space-y-6">
+
+    <h1 class="text-3xl font-bold text-green-600">
+      😴 Sleep Tracker
+    </h1>
+
+    <!-- Age -->
+    <input 
+      type="number"
+      id="age"
+      placeholder="Enter your age"
+      class="w-full p-3 rounded-xl border focus:ring-2 focus:ring-green-400"
+    />
+
+    <!-- Sleep Start -->
+    <div class="text-left">
+      <label class="font-semibold">Slept At</label>
+      <input 
+        type="time"
+        id="startTime"
+        class="w-full p-3 rounded-xl border focus:ring-2 focus:ring-green-400"
+      />
+    </div>
+
+    <!-- Wake Time -->
+    <div class="text-left">
+      <label class="font-semibold">Woke Up At</label>
+      <input 
+        type="time"
+        id="endTime"
+        class="w-full p-3 rounded-xl border focus:ring-2 focus:ring-green-400"
+      />
+    </div>
+
+    <button
+      onclick="checkSleep()"
+      class="w-full bg-green-600 text-white py-3 rounded-xl font-semibold hover:scale-105 transition">
+      Analyze Sleep
+    </button>
+
+    <p id="result" class="font-semibold text-lg text-gray-700"></p>
+
+    <button onclick="window.location.href='menu.html'"
+      class="text-sm text-gray-500 hover:underline">
+      ← Back to Menu
+    </button>
+
+  </div>
+  
+<script>
+function checkSleep() {
+
+  const age = Number(document.getElementById("age").value);
+  const start = document.getElementById("startTime").value;
+  const end = document.getElementById("endTime").value;
+  const result = document.getElementById("result");
+
+  if (!age || !start || !end) {
+    result.innerText = "Please fill all fields.";
+    return;
+  }
+
+  // Convert time to minutes
+  const startParts = start.split(":");
+  const endParts = end.split(":");
+
+  let startMinutes = parseInt(startParts[0]) * 60 + parseInt(startParts[1]);
+  let endMinutes = parseInt(endParts[0]) * 60 + parseInt(endParts[1]);
+
+  // If sleep crosses midnight
+  if (endMinutes < startMinutes) {
+    endMinutes += 24 * 60;
+  }
+
+  const totalHours = (endMinutes - startMinutes) / 60;
+
+  let requiredSleep;
+
+  // Age-based requirement
+  if (age <= 12) requiredSleep = 9;
+  else if (age <= 18) requiredSleep = 8;
+  else if (age <= 60) requiredSleep = 7;
+  else requiredSleep = 7;
+
+  let message;
+
+  if (totalHours >= requiredSleep && totalHours <= requiredSleep + 1) {
+    message = `Great! You slept for ${totalHours.toFixed(1)} hours. You've slept well.`;
+  }
+  else if (totalHours >= requiredSleep - 1) {
+    message = `You slept for ${totalHours.toFixed(1)} hours. Lets work on the sleep schedule.`;
+  }
+  else {
+    message = `You slept for ${totalHours.toFixed(1)} hours. You must be tired... Let's work on that Sleep Schedule.`;
+  }
+
+  result.innerText = message;
+}
+</script>
+
+<!-- SMALL FLOATING AVATAR -->
+
+<div id="sleepAvatar" 
+     class="fixed bottom-6 right-6 w-[120px] h-[120px] z-40 pointer-events-none">
+
+  <img id="sleepBody"
+       class="absolute inset-0 w-full h-full object-contain">
+
+  <img id="sleepHair"
+       class="absolute inset-0 w-full h-full object-contain">
+
+  <img id="sleepEyes"
+       class="absolute inset-0 w-full h-full object-contain pointer-events-none">
+       
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

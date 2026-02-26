@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Care Your Medi</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="min-h-screen bg-gradient-to-br from-green-300 to-emerald-500 flex flex-col items-center justify-center">
+
+  <!-- MINI HUD -->
+  <div id="miniHUD" class="fixed top-6 left-6 bg-white/90 p-4 rounded-2xl shadow-xl w-56 z-50">
+
+    <p class="text-sm font-semibold mb-2">🍗 Hunger</p>
+    <div class="w-full bg-gray-200 rounded-full h-3 mb-3">
+      <div id="hungerBar" class="bg-red-400 h-3 rounded-full"></div>
+    </div>
+
+    <p class="text-sm font-semibold mb-2">💧 Thirst</p>
+    <div class="w-full bg-gray-200 rounded-full h-3 mb-3">
+      <div id="thirstBar" class="bg-blue-400 h-3 rounded-full"></div>
+    </div>
+
+    <p class="text-sm font-semibold mb-2">😴 Sleep</p>
+    <div class="w-full bg-gray-200 rounded-full h-3">
+      <div id="sleepBar" class="bg-purple-400 h-3 rounded-full"></div>
+    </div>
+
+  </div>
+
+  <!-- Main Card -->
+  <div class="bg-white/95 p-10 rounded-3xl shadow-2xl w-full max-w-4xl flex items-center justify-between">
+
+  <!-- LEFT: Avatar -->
+  <div class="relative w-[220px] h-[220px]">
+
+    <img id="careBody"
+         class="absolute inset-0 w-full h-full object-contain">
+
+    <img id="careHair"
+         class="absolute inset-0 w-full h-full object-contain">
+
+    <img id="careEyes"
+         class="absolute inset-0 w-full h-full object-contain pointer-events-none">
+
+  </div>
+
+  <!-- RIGHT: Buttons -->
+  <div class="flex flex-col gap-6 w-full max-w-sm text-center">
+
+    <h1 class="text-3xl font-bold text-green-600">Care Your Medi</h1>
+
+    <button onclick="feedMedi()"
+      class="w-full bg-red-400 text-white p-4 rounded-xl font-semibold hover:scale-105 transition">
+      🍎 Feed Medi (+15 Hunger)
+    </button>
+
+    <button onclick="giveWater()"
+      class="w-full bg-blue-400 text-white p-4 rounded-xl font-semibold hover:scale-105 transition">
+      💧 Give Water (+15 Thirst)
+    </button>
+
+    <button onclick="putToSleep()"
+      class="w-full bg-purple-500 text-white p-4 rounded-xl font-semibold hover:scale-105 transition">
+      💤 Let Medi Sleep (+33% Sleep)
+    </button>
+
+    <button onclick="window.location.href='menu.html'"
+      class="w-full bg-gray-200 p-3 rounded-xl font-semibold">
+      ⬅ Back to Menu
+    </button>
+
+  </div>
+
+</div>  
+  <script src="script.js"></script>
+
+  <script>
+
+    function feedMedi() {
+      let stats = JSON.parse(localStorage.getItem("mediStats"));
+      stats.hunger = Math.min(100, stats.hunger + 15);
+      localStorage.setItem("mediStats", JSON.stringify(stats));
+      updateMiniHUD(stats);
+    }
+
+    function giveWater() {
+      let stats = JSON.parse(localStorage.getItem("mediStats"));
+      stats.thirst = Math.min(100, stats.thirst + 15);
+      localStorage.setItem("mediStats", JSON.stringify(stats));
+      updateMiniHUD(stats);
+    }
+
+    function putToSleep() {
+      let stats = JSON.parse(localStorage.getItem("mediStats"));
+      stats.sleep = Math.min(100, stats.sleep + 33.33);
+      localStorage.setItem("mediStats", JSON.stringify(stats));
+      updateMiniHUD(stats);
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+
+  const avatar = JSON.parse(localStorage.getItem("mediAvatar"));
+  const stats = JSON.parse(localStorage.getItem("mediStats"));
+
+  if (avatar) {
+    const body = document.getElementById("careBody");
+    const hair = document.getElementById("careHair");
+    const eyes = document.getElementById("careEyes");
+
+    if (body) body.src = `images/body${avatar.body}.png`;
+
+    if (hair && avatar.hair && avatar.hair !== 0) {
+      hair.src = `images/hair${avatar.hair}.png`;
+    }
+
+    if (eyes) {
+      updateEmotionFromStats(stats); // use global emotion logic
+    }
+  }
+
+  updateMiniHUD(stats);
+});
+
+  </script>
+
+</body>
+</html> 
